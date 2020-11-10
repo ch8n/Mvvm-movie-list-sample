@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Mvvm Sample Project</string>
+    <string name="ratings">Ratings</string>
+    <string name="director">Directors</string>
+    <string name="writer">Writers</string>
+    <string name="actor">Actors</string>
+    <string name="plot">Plot</string>
+    <string name="no_data_found">No Data Found</string>
+</resources>
