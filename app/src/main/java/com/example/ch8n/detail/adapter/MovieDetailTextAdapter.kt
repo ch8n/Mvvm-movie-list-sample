@@ -1,13 +1,11 @@
 package com.example.ch8n.detail.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ch8n.R
-import kotlinx.android.synthetic.main.movie_detail_items.view.*
+import com.example.ch8n.databinding.MovieDetailItemsBinding
 
 class MovieDetailTextAdapter private constructor(
     private val diffUtil: DiffUtil.ItemCallback<TextListItem>
@@ -35,10 +33,12 @@ class MovieDetailTextAdapter private constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemVH {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.movie_detail_items, parent, false)
-        return TextItemVH(view)
+        val binding = MovieDetailItemsBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return TextItemVH(binding)
     }
 
     override fun onBindViewHolder(holder: TextItemVH, position: Int) {
@@ -48,9 +48,9 @@ class MovieDetailTextAdapter private constructor(
 
 }
 
-class TextItemVH(view : View) : RecyclerView.ViewHolder(view){
+class TextItemVH(binding: MovieDetailItemsBinding) : RecyclerView.ViewHolder(binding.root){
 
-    val text_movie_item = view.text_movie_item
+    val text_movie_item = binding.textMovieItem
 
     fun bind(
         textListItem: TextListItem
