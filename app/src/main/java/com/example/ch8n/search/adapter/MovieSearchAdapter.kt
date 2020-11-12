@@ -1,34 +1,38 @@
 package com.example.ch8n.search.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ch8n.R
+import com.example.ch8n.databinding.SearchMovieItemBinding
 import com.example.ch8n.utils.cancelImageLoading
 import com.example.ch8n.utils.loadImage
-import kotlinx.android.synthetic.main.search_movie_item.view.*
 
 class MovieSearchAdapter private constructor(
-    private val diffUtil: DiffUtil.ItemCallback<SearchListItem>,
+    diffUtil: DiffUtil.ItemCallback<SearchListItem>,
     private val onItemClick: (Int) -> Unit
-) : ListAdapter<SearchListItem, MovieItemVH>(diffUtil){
+) : ListAdapter<SearchListItem, MovieItemVH>(diffUtil) {
 
     companion object {
 
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SearchListItem>() {
 
-            override fun areItemsTheSame(oldItem: SearchListItem, newItem: SearchListItem): Boolean =
+            override fun areItemsTheSame(
+                oldItem: SearchListItem,
+                newItem: SearchListItem
+            ): Boolean =
                 oldItem.movieId == newItem.movieId
 
-            override fun areContentsTheSame(oldItem: SearchListItem, newItem: SearchListItem): Boolean =
+            override fun areContentsTheSame(
+                oldItem: SearchListItem,
+                newItem: SearchListItem
+            ): Boolean =
                 oldItem == newItem
 
         }
 
-        fun newInstance(onItemClick : (Int) -> Unit) = MovieSearchAdapter(
+        fun newInstance(onItemClick: (Int) -> Unit) = MovieSearchAdapter(
             DIFF_CALLBACK, onItemClick
         )
     }
@@ -38,14 +42,17 @@ class MovieSearchAdapter private constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemVH {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.search_movie_item, parent, false)
-        return MovieItemVH(view)
+        val binding =
+            SearchMovieItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        return MovieItemVH(binding)
     }
 
     override fun onBindViewHolder(holder: MovieItemVH, position: Int) {
-       holder.bind(requireNotNull(getItemAt(position)), onItemClick)
+        holder.bind(requireNotNull(getItemAt(position)), onItemClick)
     }
 
     override fun onViewAttachedToWindow(holder: MovieItemVH) {
@@ -60,18 +67,18 @@ class MovieSearchAdapter private constructor(
 
 }
 
-class MovieItemVH(view : View) : RecyclerView.ViewHolder(view){
+class MovieItemVH(binding: SearchMovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    var searchListItem : SearchListItem? = null
-    val image_movie = view.image_movie
-    val text_movie_title = view.text_movie_title
-    val text_movie_year = view.text_movie_year
-    val text_movie_type = view.text_movie_type
+    var searchListItem: SearchListItem? = null
+    val image_movie = binding.imageMovie
+    val text_movie_title = binding.textMovieTitle
+    val text_movie_year = binding.textMovieYear
+    val text_movie_type = binding.textMovieType
 
     fun bind(
         searchListItem: SearchListItem,
         onItemClick: (Int) -> Unit
-    ){
+    ) {
         this.searchListItem = searchListItem
         image_movie.loadImage(searchListItem.imageUrl)
         text_movie_title.setText(searchListItem.movieTitle)
@@ -83,14 +90,20 @@ class MovieItemVH(view : View) : RecyclerView.ViewHolder(view){
         }
     }
 
-    fun cancelLoading(){
+    fun cancelLoading() {
         image_movie.cancelImageLoading()
     }
 
-    fun loadMoviePoster(){
-        image_movie.loadImage(searchListItem?.imageUrl?:"")
+    fun loadMoviePoster() {
+        image_movie.loadImage(searchListItem?.imageUrl ?: "")
     }
 
 }
 
-data class SearchListItem(val imageUrl: String, val movieTitle : String, val movieReleaseYear : String, val movieId : String, val movieType : String)
+data class SearchListItem(
+    val imageUrl: String,
+    val movieTitle: String,
+    val movieReleaseYear: String,
+    val movieId: String,
+    val movieType: String
+)
